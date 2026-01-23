@@ -1,40 +1,68 @@
 # Vulnerable .NET Application
 
-This is a sample .NET 6 Web API with intentionally vulnerable dependencies for testing vulnerability scanning and remediation tools.
+Test application with known vulnerable dependencies for testing vulnerability remediation agents.
+
+## Directory Structure
+```
+VulnerableApi/
+├── VulnerableApi.csproj
+├── Program.cs
+├── appsettings.json
+├── appsettings.Development.json
+├── Properties/
+│   └── launchSettings.json
+└── Controllers/
+    └── ApiController.cs
+```
 
 ## Known Vulnerabilities
 
-1. **Newtonsoft.Json 12.0.1** - CVE-2024-21907 (Denial of Service)
-2. **System.Text.Json 6.0.0** - Multiple CVEs in earlier 6.0.x versions
-3. **Microsoft.Data.SqlClient 2.0.0** - CVE-2024-0056 (Information Disclosure)
-4. **System.Drawing.Common 5.0.0** - CVE-2021-24112 (Remote Code Execution)
-5. **System.Security.Cryptography.Xml 4.7.0** - CVE-2022-34716 (Elevation of Privilege)
-
-## Setup
-```bash
-# Restore dependencies
-dotnet restore
-
-# Build the project
-dotnet build
-
-# Run the application
-dotnet run
-```
+1. **System.Security.Cryptography.Pkcs 6.0.0** - CVE-2024-0057 (High)
+2. **Microsoft.Identity.Web 1.25.0** - CVE-2024-21319 (High)
+3. **System.Security.Cryptography.Xml 6.0.0** - CVE-2023-29331 (High)
+4. **System.Net.Http 4.3.0** - CVE-2023-38180 (Important)
+5. **System.Text.Encodings.Web 4.5.0** - CVE-2021-43877 (Critical)
+6. **Newtonsoft.Json 11.0.2** - Multiple CVEs
 
 ## Scan for Vulnerabilities
 ```bash
-# Using Trivy
+# Using Trivy (after creating the project structure)
 trivy fs --scanners vuln --format json --output trivy-report.json .
 
-# Using dotnet list package
+# Using .NET CLI (requires .NET SDK)
 dotnet list package --vulnerable --include-transitive
 ```
 
 ## Expected Fixes
 
-- Newtonsoft.Json: Upgrade to 13.0.3+
-- System.Text.Json: Upgrade to 8.0.0+
-- Microsoft.Data.SqlClient: Upgrade to 5.1.0+
-- System.Drawing.Common: Upgrade to 7.0.0+
-- System.Security.Cryptography.Xml: Upgrade to 8.0.0+
+- System.Security.Cryptography.Pkcs: Upgrade to 6.0.4 or later
+- Microsoft.Identity.Web: Upgrade to 2.16.0 or later
+- System.Security.Cryptography.Xml: Upgrade to 6.0.2 or later
+- System.Net.Http: Upgrade to 4.3.4 or later
+- System.Text.Encodings.Web: Upgrade to 6.0.0 or later
+- Newtonsoft.Json: Upgrade to 13.0.1 or later
+
+## Build and Run (requires .NET 6 SDK)
+```bash
+dotnet restore
+dotnet build
+dotnet run
+```
+
+Then access:
+- Swagger UI: http://localhost:5000/swagger
+- API endpoint: http://localhost:5000/api/api/test
+```
+
+## Folder Structure to Create
+```
+VulnerableApi/
+├── VulnerableApi.csproj
+├── Program.cs
+├── appsettings.json
+├── appsettings.Development.json
+├── README.md
+├── Properties/
+│   └── launchSettings.json
+└── Controllers/
+    └── ApiController.cs
